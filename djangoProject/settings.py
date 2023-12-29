@@ -35,7 +35,7 @@ def get_env_variable(var_name):
     raise ImproperlyConfigured(error_msg)
 
 SECRET_KEY = get_env_variable('DJANGO_SECRET')
-
+DEBUG = get_env_variable('DEBUG')
 ALLOWED_HOSTS = ['*']
 APPEND_SLASH = True
 # Application definition
@@ -146,13 +146,7 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'USERNAME': get_env_variable('DB_USERNAME'),
-        'PASSWORD': get_env_variable('DB_PASSWORD'),
-        'HOST': get_env_variable('DB_HOST'),
-        'PORT': get_env_variable('DB_PORT'),
-        'OPTIONS':{
-            'init_command' : "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
