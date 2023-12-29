@@ -35,7 +35,6 @@ def get_env_variable(var_name):
     raise ImproperlyConfigured(error_msg)
 
 SECRET_KEY = get_env_variable('DJANGO_SECRET')
-DEBUG = get_env_variable('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 APPEND_SLASH = True
