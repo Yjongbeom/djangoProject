@@ -71,17 +71,17 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         #'rest_framework.permissions.IsAuthenticated',  # 인증된 사용자만 접근
-        # 'rest_framework.permissions.IsAdminUser',  # 관리자만 접근
+        #'rest_framework.permissions.IsAdminUser',  # 관리자만 접근
         'rest_framework.permissions.AllowAny',  # 누구나 접근
     ),
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ALGORITHM': 'HS256',  # 사용할 알고리즘 지정 (HS256은 HMAC SHA-256 알고리즘)
     'SIGNING_KEY': SECRET_KEY,  # 시크릿 키 사용
-    'AUTH_HEADER_TYPES': ('Bearer',),  # Authorization 헤더의 타입 지정
+    'AUTH_HEADER_TYPES': (''),  # Authorization 헤더의 타입 지정
 }
 
 DJANGO_REST_AUTH = {
