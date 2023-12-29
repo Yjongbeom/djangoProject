@@ -32,6 +32,8 @@ class AuthAPIView(APIView):
                 user = get_object_or_404(User, pk=pk)
                 serializer = UserSerializer(instance=user)
                 res = Response(serializer.data, status=status.HTTP_200_OK)
+                res.set_cookie('access', access)
+                res.set_cookie('refresh', refresh)
                 return res
             raise jwt.exceptions.InvalidTokenError
 
@@ -63,9 +65,13 @@ class AuthAPIView(APIView):
                 },
                 status=status.HTTP_200_OK,
             )
+            # jwt 토큰 => 쿠키에 저장
+            res.set_cookie("access", access_token, httponly=True)
+            res.set_cookie("refresh", refresh_token, httponly=True)
             return res
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 class RegisterAPIView(APIView):
     def post(self, request):
