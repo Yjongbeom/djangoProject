@@ -33,7 +33,7 @@ def get_env_variable(var_name):
     raise ImproperlyConfigured(error_msg)
 
 SECRET_KEY = get_env_variable('SECRET_KEY')
-DEBUG = get_env_variable('DEBUG')
+DEBUG = False
 ALLOWED_HOSTS = ['*']
 # Application definition
 AUTH_USER_MODEL = 'djangoProject.User'
