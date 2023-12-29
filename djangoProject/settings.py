@@ -37,8 +37,6 @@ def get_env_variable(var_name):
         raise ImproperlyConfigured(error_msg)
 
 SECRET_KEY = get_env_variable('SECRET_KEY')
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = get_env_variable('DEBUG')
 
 ALLOWED_HOSTS = ['*'] # 프론트와 연결시 자신의 아이피 생성
 # Application definition
