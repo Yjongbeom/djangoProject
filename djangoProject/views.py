@@ -33,11 +33,7 @@ class AuthAPIView(APIView):
             try:
                 # access token을 decode 해서 유저 id 추출 => 유저 식별
                 access = request.data.get("access")
-                print(1)
-                print(access)
                 payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
-                print(2)
-                print(payload)
                 username = payload.get('username')
                 user = get_object_or_404(User, username=username)
                 serializer = UserSerializer(instance=user)
@@ -45,17 +41,11 @@ class AuthAPIView(APIView):
 
             except(jwt.exceptions.ExpiredSignatureError):
                 # 토큰 만료 시 토큰 갱신
-                data = {'refresh': request.data.get("refresh")}
-                print(3)
-                print(request.data.get("refresh"))
-                serializer = TokenRefreshSerializer(data=data)
+                refresh_value = request.data.get("refresh")
+                serializer = TokenRefreshSerializer(data={'refresh': refresh_value})
                 if serializer.is_valid(raise_exception=True):
-                    print(4)
-                    print(serializer.data)
-                    access = serializer.data.get('access', None)
-                    print(access)
+                    access = serializer.validated_data.get('access', None)
                     res = Response(data=access, status=status.HTTP_200_OK)
-                    print(res)
                     return res
                 raise jwt.exceptions.InvalidTokenError("Token refresh failed")
 
