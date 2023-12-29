@@ -10,40 +10,8 @@ from .settings import SECRET_KEY
 
 class AuthAPIView(APIView):
     # 유저 정보 확인
-    def get(self, request):
-        try:
-            # access token을 decode 해서 유저 id 추출 => 유저 식별
-            access = request.COOKIES['access']
-            payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
-            username = payload.get('username')
-            user = get_object_or_404(User, username=username)
-            serializer = UserSerializer(instance=user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        except(jwt.exceptions.ExpiredSignatureError):
-            # 토큰 만료 시 토큰 갱신
-            data = {'refresh': request.COOKIES.get('refresh', None)}
-            serializer = TokenRefreshSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                access = serializer.data.get('access', None)
-                refresh = serializer.data.get('refresh', None)
-                payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
-                pk = payload.get('username')
-                user = get_object_or_404(User, pk=pk)
-                serializer = UserSerializer(instance=user)
-                res = Response(serializer.data, status=status.HTTP_200_OK)
-                res.set_cookie('access', access)
-                res.set_cookie('refresh', refresh)
-                return res
-            raise jwt.exceptions.InvalidTokenError
-
-        except(jwt.exceptions.InvalidTokenError):
-            # 사용 불가능한 토큰일 때
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-    # 로그인
     def post(self, request):
-       # 유저 인증
+            # 유저 인증
         user = authenticate(
             username=request.data.get("username"), password=request.data.get("password")
         )
@@ -56,7 +24,6 @@ class AuthAPIView(APIView):
             access_token = str(token.access_token)
             res = Response(
                 {
-                    "user": serializer.data,
                     "message": "login success",
                     "token": {
                         "access": access_token,
@@ -70,8 +37,35 @@ class AuthAPIView(APIView):
             res.set_cookie("refresh", refresh_token, httponly=True)
             return res
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            try:
+                # access token을 decode 해서 유저 id 추출 => 유저 식별
+                access = request.COOKIES['access']
+                payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
+                username = payload.get('username')
+                user = get_object_or_404(User, username=username)
+                serializer = UserSerializer(instance=user)
+                return Response(serializer.data, status=status.HTTP_200_OK)
 
+            except(jwt.exceptions.ExpiredSignatureError):
+                # 토큰 만료 시 토큰 갱신
+                data = {'refresh': request.COOKIES.get('refresh', None)}
+                serializer = TokenRefreshSerializer(data=data)
+                if serializer.is_valid(raise_exception=True):
+                    access = serializer.data.get('access', None)
+                    refresh = serializer.data.get('refresh', None)
+                    payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
+                    pk = payload.get('username')
+                    user = get_object_or_404(User, pk=pk)
+                    serializer = UserSerializer(instance=user)
+                    res = Response(serializer.data, status=status.HTTP_200_OK)
+                    res.set_cookie('access', access)
+                    res.set_cookie('refresh', refresh)
+                    return res
+                raise jwt.exceptions.InvalidTokenError
+
+            except(jwt.exceptions.InvalidTokenError):
+                # 사용 불가능한 토큰일 때
+                return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class RegisterAPIView(APIView):
     def post(self, request):

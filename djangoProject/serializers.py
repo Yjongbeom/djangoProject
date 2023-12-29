@@ -9,13 +9,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             'username',
             'division',
-            'password',
         )
 
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
-            password=validated_data['password'],
             division=validated_data['division'],
         )
         return user
