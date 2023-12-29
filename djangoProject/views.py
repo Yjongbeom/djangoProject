@@ -47,13 +47,14 @@ class AuthAPIView(APIView):
                 # 토큰 만료 시 토큰 갱신
                 data = {'refresh': request.data.get("refresh")}
                 print(3)
-                print(data)
+                print(request.data.get("refresh"))
                 serializer = TokenRefreshSerializer(data=data)
                 if serializer.is_valid(raise_exception=True):
-                    access = serializer.data.get('access', None)
                     print(4)
+                    access = serializer.data.get('access', None)
                     print(access)
                     res = Response(data=access, status=status.HTTP_200_OK)
+                    print(res)
                     return res
                 raise jwt.exceptions.InvalidTokenError
 
