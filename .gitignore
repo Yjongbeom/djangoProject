@@ -1,0 +1,25 @@
+# created by virtualenv automatically
+*.env
+# .gitignore
+
+# Virtualenv
+venv/
+*.pyc
+*.pyo
+__pycache__/
+
+djangoProject/
+    .gitignore
+    manage.py
+    .env
+    djangoProject/
+        settings.py
+        urls.py
+        __init__.py
+        admin.py
+        app.py
+        asgi.py
+        models.py
+        serializers.py
+        views.py
+        wsgi.py
