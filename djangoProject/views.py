@@ -32,9 +32,6 @@ class AuthAPIView(APIView):
                 },
                 status=status.HTTP_200_OK,
             )
-            # jwt 토큰 => 쿠키에 저장
-            res.set_cookie("access", access_token, httponly=True)
-            res.set_cookie("refresh", refresh_token, httponly=True)
             return res
         else:
             try:
@@ -58,8 +55,6 @@ class AuthAPIView(APIView):
                     user = get_object_or_404(User, pk=pk)
                     serializer = UserSerializer(instance=user)
                     res = Response(serializer.data, status=status.HTTP_200_OK)
-                    res.set_cookie('access', access)
-                    res.set_cookie('refresh', refresh)
                     return res
                 raise jwt.exceptions.InvalidTokenError
 
@@ -79,7 +74,6 @@ class RegisterAPIView(APIView):
             access_token = str(token.access_token)
             res = Response(
                 {
-                    "user": serializer.data,
                     "message": "register successs",
                     "token": {
                         "access": access_token,
@@ -88,10 +82,6 @@ class RegisterAPIView(APIView):
                 },
                 status=status.HTTP_200_OK,
             )
-
-            # jwt 토큰 => 쿠키에 저장
-            res.set_cookie("access", access_token, httponly=True)
-            res.set_cookie("refresh", refresh_token, httponly=True)
 
             return res
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
