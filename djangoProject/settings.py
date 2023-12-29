@@ -82,6 +82,8 @@ SIMPLE_JWT = {
     'ALGORITHM': 'HS256',  # 사용할 알고리즘 지정 (HS256은 HMAC SHA-256 알고리즘)
     'SIGNING_KEY': SECRET_KEY,  # 시크릿 키 사용
     'AUTH_HEADER_TYPES': (''),  # Authorization 헤더의 타입 지정
+    "USER_ID_FIELD": "username",
+    "USER_ID_CLAIM": "username",
 }
 
 DJANGO_REST_AUTH = {
