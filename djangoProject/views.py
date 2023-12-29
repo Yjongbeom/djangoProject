@@ -17,22 +17,12 @@ class AuthAPIView(APIView):
         )
         # 이미 회원가입 된 유저일 때
         if user is not None:
-            serializer = UserSerializer(user)
             # jwt 토큰 접근
             token = TokenObtainPairSerializer.get_token(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
-            res = Response(
-                {
-                    "message": "login success",
-                    "token": {
-                        "access": access_token,
-                        "refresh": refresh_token,
-                    },
-                },
-                status=status.HTTP_200_OK,
-            )
-            return res
+
+            return refresh_token, access_token
         else:
             try:
                 # access token을 decode 해서 유저 id 추출 => 유저 식별
