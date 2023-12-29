@@ -33,7 +33,7 @@ def get_env_variable(var_name):
     raise ImproperlyConfigured(error_msg)
 
 SECRET_KEY = get_env_variable('SECRET_KEY')
-DEBUG = False
+DEBUG = get_env_variable('DEBUG')
 ALLOWED_HOSTS = ['*']
 # Application definition
 AUTH_USER_MODEL = 'djangoProject.User'
@@ -70,9 +70,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.IsAuthenticated',  # 인증된 사용자만 접근
+        'rest_framework.permissions.IsAuthenticated',  # 인증된 사용자만 접근
         # 'rest_framework.permissions.IsAdminUser',  # 관리자만 접근
-        'rest_framework.permissions.AllowAny',  # 누구나 접근
+        #'rest_framework.permissions.AllowAny',  # 누구나 접근
     ),
 }
 
