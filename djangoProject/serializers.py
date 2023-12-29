@@ -11,16 +11,18 @@ class UserSerializer(serializers.ModelSerializer):
             'division',
         )
 
+class RegisterUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'username',
+            'division',
+            'password',
+        )
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
             division=validated_data['division'],
+            password=validated_data['password']
         )
         return user
-
-class TokenSerializer(serializers.Serializer):
-    class Meta:
-        fields = (
-            'access_token',
-            'refresh_token',
-        )

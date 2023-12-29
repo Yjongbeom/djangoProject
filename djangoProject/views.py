@@ -41,12 +41,16 @@ class AuthAPIView(APIView):
 
             except(jwt.exceptions.ExpiredSignatureError):
                 # 토큰 만료 시 토큰 갱신
-                refresh_value = request.data.get("refresh")
-                serializer = TokenRefreshSerializer(data={'refresh': refresh_value})
-                if serializer.is_valid(raise_exception=True):
-                    access = serializer.validated_data.get('access', None)
-                    res = Response(data=access, status=status.HTTP_200_OK)
-                    return res
+                try:
+                    refresh_value = request.data.get("refresh")
+                    serializer = TokenRefreshSerializer(data={'refresh': refresh_value})
+                    if serializer.is_valid(raise_exception=True):
+                        access = serializer.validated_data.get('access', None)
+                        res = Response(data=access, status=status.HTTP_200_OK)
+                        return res
+                except serializers.ValidationError:
+                    # refresh token도 만료된 경우, 재로그인 해주세요
+                    return Response(status=status.HTTP_401_UNAUTHORIZED)
                 raise jwt.exceptions.InvalidTokenError("Token refresh failed")
 
             except(jwt.exceptions.InvalidTokenError):
@@ -55,7 +59,7 @@ class AuthAPIView(APIView):
 
 class RegisterAPIView(APIView):
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = RegisterUserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
 
@@ -65,11 +69,8 @@ class RegisterAPIView(APIView):
             access_token = str(token.access_token)
             res = Response(
                 {
-                    "message": "register successs",
-                    "token": {
-                        "access": access_token,
-                        "refresh": refresh_token,
-                    },
+                    "access": access_token,
+                    "refresh": refresh_token,
                 },
                 status=status.HTTP_200_OK,
             )
