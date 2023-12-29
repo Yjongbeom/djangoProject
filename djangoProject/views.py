@@ -49,6 +49,11 @@ class AuthAPIView(APIView):
                 print(3)
                 print(data)
                 serializer = TokenRefreshSerializer(data=data)
+                try:
+                    serializer.is_valid(raise_exception=True)
+                except Exception as e:
+                    print(f'Error: {e}')
+                    # Further handling
                 if serializer.is_valid(raise_exception=True):
                     access = serializer.data.get('access', None)
                     print(4)
