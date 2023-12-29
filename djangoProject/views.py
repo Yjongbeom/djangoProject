@@ -51,12 +51,9 @@ class AuthAPIView(APIView):
                 serializer = TokenRefreshSerializer(data=data)
                 if serializer.is_valid(raise_exception=True):
                     access = serializer.data.get('access', None)
-                    refresh = serializer.data.get('refresh', None)
-                    payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
-                    pk = payload.get('username')
-                    user = get_object_or_404(User, pk=pk)
-                    serializer = UserSerializer(instance=user)
-                    res = Response(serializer.data, status=status.HTTP_200_OK)
+                    print(4)
+                    print(access)
+                    res = Response(data=access, status=status.HTTP_200_OK)
                     return res
                 raise jwt.exceptions.InvalidTokenError
 
