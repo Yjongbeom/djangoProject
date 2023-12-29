@@ -51,12 +51,13 @@ class AuthAPIView(APIView):
                 serializer = TokenRefreshSerializer(data=data)
                 if serializer.is_valid(raise_exception=True):
                     print(4)
+                    print(serializer.data)
                     access = serializer.data.get('access', None)
                     print(access)
                     res = Response(data=access, status=status.HTTP_200_OK)
                     print(res)
                     return res
-                raise jwt.exceptions.InvalidTokenError
+                raise jwt.exceptions.InvalidTokenError("Token refresh failed")
 
             except(jwt.exceptions.InvalidTokenError):
                 # 사용 불가능한 토큰일 때
