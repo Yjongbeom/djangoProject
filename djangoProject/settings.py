@@ -21,8 +21,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-env = environ.Env(DEBUG=(bool, True))
-
 environ.Env.read_env(
     env_file=os.path.join(BASE_DIR, '.env')
 )
@@ -35,7 +33,7 @@ def get_env_variable(var_name):
     raise ImproperlyConfigured(error_msg)
 
 SECRET_KEY = get_env_variable('DJANGO_SECRET')
-DEBUG = get_env_variable('DEBUG')
+DEBUG = False
 ALLOWED_HOSTS = ['*']
 APPEND_SLASH = True
 # Application definition
