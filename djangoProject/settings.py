@@ -31,7 +31,7 @@ def get_env_variable(var_name):
     error_msg = 'Set the {} environment variable'.format(var_name)
     raise ImproperlyConfigured(error_msg)
 
-SECRET_KEY = get_env_variable('DJANGO_SECRET')
+SECRET_KEY = get_env_variable('SECRET_KEY')
 DEBUG = False
 ALLOWED_HOSTS = ['*']
 # Application definition
