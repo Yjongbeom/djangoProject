@@ -22,7 +22,9 @@ class AuthAPIView(APIView):
             refresh_token = str(token)
             access_token = str(token.access_token)
 
-            return refresh_token, access_token
+            serializer = TokenSerializer(data={"refresh": refresh_token, "access":access_token})
+
+            return serializer.data
         else:
             try:
                 # access token을 decode 해서 유저 id 추출 => 유저 식별

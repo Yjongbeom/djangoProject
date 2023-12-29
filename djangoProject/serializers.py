@@ -17,3 +17,10 @@ class UserSerializer(serializers.ModelSerializer):
             division=validated_data['division'],
         )
         return user
+
+class TokenSerializer(serializers.Serializer):
+    class Meta:
+        fields = (
+            'access_token',
+            'refresh_token',
+        )
