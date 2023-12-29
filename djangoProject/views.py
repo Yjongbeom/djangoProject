@@ -49,7 +49,7 @@ class AuthAPIView(APIView):
                         res = Response(data=access, status=status.HTTP_200_OK)
                         return res
                 except serializers.ValidationError:
-                    # refresh token도 만료된 경우, 재로그인 해주세요
+                    # refresh token도 만료된 경우, 재로그인 해주세요 401오류
                     return Response(status=status.HTTP_401_UNAUTHORIZED)
                 raise jwt.exceptions.InvalidTokenError("Token refresh failed")
 
