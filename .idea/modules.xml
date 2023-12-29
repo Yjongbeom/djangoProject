@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/likelion12th-homepage.iml" filepath="$PROJECT_DIR$/.idea/likelion12th-homepage.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/djangoProject.iml" filepath="$PROJECT_DIR$/.idea/djangoProject.iml" />
+>>>>>>> b6d1263720197e7557b8f58217155df761d9e081
     </modules>
   </component>
 </project>
