@@ -2,7 +2,7 @@ import jwt
 from rest_framework.views import APIView
 from .serializers import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
-from rest_framework import status, viewsets
+from rest_framework import status
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
@@ -32,7 +32,6 @@ class AuthAPIView(APIView):
         else:
             try:
                 # access token을 decode 해서 유저 id 추출 => 유저 식별
-                print(0)
                 access = request.data.get("access")
                 print(1)
                 print(access)
@@ -46,7 +45,7 @@ class AuthAPIView(APIView):
 
             except(jwt.exceptions.ExpiredSignatureError):
                 # 토큰 만료 시 토큰 갱신
-                data = {'refresh': request.data.get("refresh", None)}
+                data = request.data.get("refresh")
                 print(3)
                 print(data)
                 serializer = TokenRefreshSerializer(data=data)
