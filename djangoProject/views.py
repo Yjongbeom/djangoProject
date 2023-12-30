@@ -1,5 +1,4 @@
 import jwt
-import rest_framework_simplejwt
 from rest_framework.views import APIView
 from .serializers import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
@@ -8,7 +7,6 @@ from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from .settings import SECRET_KEY
-from rest_framework_simplejwt.exceptions import TokenBackendError
 
 
 class AuthAPIView(APIView):
@@ -44,25 +42,19 @@ class AuthAPIView(APIView):
 
             except(jwt.exceptions.ExpiredSignatureError):
                 # 토큰 만료 시 토큰 갱신
-                try:
-                    print(1)
-                    refresh_value = request.data.get("refresh")
-                    print(2)
-                    serializer = TokenRefreshSerializer(data={'refresh': refresh_value})
-                    print(5)
-                    if serializer.is_valid(raise_exception=True):
-                        print(3)
-                        access_token = serializer.validated_data.get('access', None)
-                        print(4)
-                        res = Response(
-                            {
-                                "access": access_token,
-                            },
-                            status=status.HTTP_200_OK
-                        )
-                        return res
-                except(rest_framework_simplejwt.exceptions.TokenBackendError):
-                        # 토큰이 완전히 유효하지 않음
+                refresh_value = request.data.get("refresh")
+                serializer = TokenRefreshSerializer(data={'refresh': refresh_value})
+                if serializer.is_valid(raise_exception=True):
+                    access_token = serializer.validated_data.get('access', None)
+                    res = Response(
+                        {
+                            "access": access_token,
+                        },
+                        status=status.HTTP_200_OK
+                    )
+                    return res
+                else:
+                    # 토큰이 완전히 유효하지 않음
                     return Response({"error": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
 
 class RegisterAPIView(APIView):
