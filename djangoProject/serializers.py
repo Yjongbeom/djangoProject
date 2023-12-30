@@ -20,6 +20,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
             'username',
             'division',
             'password',
+            'name',
         )
     def create(self, validated_data):
         user = User.objects.create_user(
