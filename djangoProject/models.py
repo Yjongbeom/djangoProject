@@ -35,6 +35,7 @@ class User(AbstractBaseUser):
     week_id = models.IntegerField(help_text="Week ID", default=0)
     assignment_id = models.IntegerField(help_text="Assignment ID", default=0)
     notice_id = models.IntegerField(help_text="Notice ID",default=0)
+    access = models.CharField(help_text="Access Token", max_length=255, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)

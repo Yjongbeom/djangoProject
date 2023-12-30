@@ -23,6 +23,9 @@ class AuthAPIView(APIView):
             token = TokenObtainPairSerializer.get_token(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
+            user.access = access_token
+            user.save()
+
             res = Response(
                 {
                         "access": access_token,
@@ -40,7 +43,7 @@ class AuthAPIView(APIView):
                 print(access)
                 payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
                 username = payload.get('username')
-                user = get_object_or_404(User, username=username, access=access)
+                user = get_object_or_404(User, username=username)
                 serializer = UserSerializer(instance=user)
                 return Response(serializer.data, status=status.HTTP_200_OK)
 
