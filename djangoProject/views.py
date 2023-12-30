@@ -45,8 +45,13 @@ class AuthAPIView(APIView):
                     refresh_value = request.data.get("refresh")
                     serializer = TokenRefreshSerializer(data={'refresh': refresh_value})
                     if serializer.is_valid(raise_exception=True):
-                        access = serializer.validated_data.get('access', None)
-                        res = Response(data=access, status=status.HTTP_200_OK)
+                        access_token = serializer.validated_data.get('access', None)
+                        res = Response(
+                            {
+                                "access": access_token,
+                            },
+                            status=status.HTTP_200_OK
+                        )
                         return res
                 except serializers.ValidationError:
                     # refresh token도 만료된 경우, 재로그인 해주세요 401오류
