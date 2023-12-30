@@ -45,6 +45,7 @@ class AuthAPIView(APIView):
             except(jwt.exceptions.ExpiredSignatureError):
                 # 토큰 만료 시 토큰 갱신
                 try:
+                    print(1)
                     refresh_value = request.data.get("refresh")
                     serializer = TokenRefreshSerializer(data={'refresh': refresh_value})
                     if serializer.is_valid(raise_exception=True):
@@ -57,8 +58,9 @@ class AuthAPIView(APIView):
                         )
                         return res
                 except(rest_framework_simplejwt.exceptions.TokenBackendError):
+                    print(2)
                         # 토큰이 완전히 유효하지 않음
-                        return Response({"error": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
+                    return Response({"error": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
 
 class RegisterAPIView(APIView):
     def post(self, request):
