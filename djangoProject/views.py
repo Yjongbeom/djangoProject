@@ -47,9 +47,13 @@ class AuthAPIView(APIView):
                 try:
                     print(1)
                     refresh_value = request.data.get("refresh")
+                    print(2)
                     serializer = TokenRefreshSerializer(data={'refresh': refresh_value})
+                    print(5)
                     if serializer.is_valid(raise_exception=True):
+                        print(3)
                         access_token = serializer.validated_data.get('access', None)
+                        print(4)
                         res = Response(
                             {
                                 "access": access_token,
@@ -58,7 +62,6 @@ class AuthAPIView(APIView):
                         )
                         return res
                 except(rest_framework_simplejwt.exceptions.TokenBackendError):
-                    print(2)
                         # 토큰이 완전히 유효하지 않음
                     return Response({"error": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
 
