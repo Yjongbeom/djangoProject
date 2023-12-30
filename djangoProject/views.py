@@ -37,33 +37,42 @@ class AuthAPIView(APIView):
         else:
             try:
                 # access token을 decode 해서 유저 id 추출 => 유저 식별
-                print(2)
                 access = request.data.get("access")
-                print(3)
-                print(access)
                 payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
                 username = payload.get('username')
                 user = get_object_or_404(User, username=username)
+
+                user.access = access
+                user.save()
+
                 serializer = UserSerializer(instance=user)
                 return Response(serializer.data, status=status.HTTP_200_OK)
 
             except(jwt.exceptions.ExpiredSignatureError):
                 # 토큰 만료 시 토큰 갱신
-                print(0)
                 refresh_value = request.data.get("refresh")
-                print(1)
-                print(refresh_value)
                 serializer = TokenRefreshSerializer(data={'refresh': refresh_value})
                 try:
                     if serializer.is_valid(raise_exception=True):
                         access_token = serializer.validated_data.get('access', None)
-                        res = Response(
-                            {
-                                "access": access_token,
-                            },
-                            status=status.HTTP_200_OK
-                        )
-                        return res
+                        payload = jwt.decode(access_token, SECRET_KEY, algorithms=['HS256'])
+                        username = payload.get('username')
+                        user = get_object_or_404(User, username=username)
+                        if access_token is not None:
+                            user.access = access_token
+                            user.save()
+
+                            res = Response(
+                                {
+                                    "access": access_token,
+                                },
+                                status=status.HTTP_200_OK
+                            )
+                            return res
+                        else:
+                            print("리프레시 중에 액세스 토큰이 None입니다. Serializer 오류:", serializer.errors)
+                            return Response({"error": "리프레시 중에 액세스 토큰이 None입니다."}, status=status.HTTP_400_BAD_REQUEST)
+
                 except(TokenBackendError, TokenError):
                     # refresh 토큰 만료
                     print(4)
