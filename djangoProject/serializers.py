@@ -10,6 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
             'username',
             'division',
             'access',
+            'name',
         )
 
 class RegisterUserSerializer(serializers.ModelSerializer):

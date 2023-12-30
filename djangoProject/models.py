@@ -32,6 +32,7 @@ class User(AbstractBaseUser):
     email = models.EmailField()
     division = models.CharField(help_text="front or back or admin", max_length=100)
     password = models.CharField(max_length=128, null=True, blank=True)
+    name = models.CharField(max_length=128,  null=True, blank=True)
     week_id = models.IntegerField(help_text="Week ID", default=0)
     assignment_id = models.IntegerField(help_text="Assignment ID", default=0)
     notice_id = models.IntegerField(help_text="Notice ID",default=0)

@@ -70,15 +70,11 @@ class AuthAPIView(APIView):
                             )
                             return res
                         else:
-                            print("리프레시 중에 액세스 토큰이 None입니다. Serializer 오류:", serializer.errors)
                             return Response({"error": "리프레시 중에 액세스 토큰이 None입니다."}, status=status.HTTP_400_BAD_REQUEST)
 
                 except(TokenBackendError, TokenError):
-                    # refresh 토큰 만료
-                    print(4)
                     return Response({"error": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
             except(jwt.exceptions.InvalidTokenError):
-                print(5)
                 # 사용 불가능 토큰
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
