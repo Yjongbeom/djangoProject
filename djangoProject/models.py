@@ -43,7 +43,7 @@ class User(AbstractBaseUser):
 
     objects = MyUserManager()
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['division']
+    REQUIRED_FIELDS = ['division', 'name']
 
     def has_perm(self, perm, obj=None):
         return True
