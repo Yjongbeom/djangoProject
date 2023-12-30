@@ -1,4 +1,5 @@
 import jwt
+import rest_framework_simplejwt
 from rest_framework.views import APIView
 from .serializers import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
@@ -7,6 +8,8 @@ from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from .settings import SECRET_KEY
+from rest_framework_simplejwt.exceptions import TokenBackendError
+
 
 class AuthAPIView(APIView):
     # 유저 정보 확인
@@ -53,9 +56,9 @@ class AuthAPIView(APIView):
                             status=status.HTTP_200_OK
                         )
                         return res
-                except(jwt.exceptions.InvalidTokenError):
-                    # 사용 불가능한 토큰일 때
-                    return Response(status=status.HTTP_400_BAD_REQUEST)
+                except(rest_framework_simplejwt.exceptions.TokenBackendError):
+                        # 토큰이 완전히 유효하지 않음
+                        return Response({"error": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
 
 class RegisterAPIView(APIView):
     def post(self, request):
