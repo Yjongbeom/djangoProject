@@ -9,6 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             'username',
             'division',
+            'access',
         )
 
 class RegisterUserSerializer(serializers.ModelSerializer):

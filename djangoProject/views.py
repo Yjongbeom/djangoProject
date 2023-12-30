@@ -40,7 +40,7 @@ class AuthAPIView(APIView):
                 print(access)
                 payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
                 username = payload.get('username')
-                user = get_object_or_404(User, username=username)
+                user = get_object_or_404(User, username=username, access=access)
                 serializer = UserSerializer(instance=user)
                 return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -63,8 +63,10 @@ class AuthAPIView(APIView):
                         return res
                 except(TokenBackendError, TokenError):
                     # refresh 토큰 만료
+                    print(4)
                     return Response({"error": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
             except(jwt.exceptions.InvalidTokenError):
+                print(5)
                 # 사용 불가능 토큰
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
