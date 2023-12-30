@@ -41,22 +41,21 @@ class AuthAPIView(APIView):
 
             except(jwt.exceptions.ExpiredSignatureError):
                 # 토큰 만료 시 토큰 갱신
-                refresh_value = request.data.get("refresh")
-                serializer = TokenRefreshSerializer(data={'refresh': refresh_value})
-                if serializer.is_valid(raise_exception=True):
-                    access_token = serializer.validated_data.get('access', None)
-                    res = Response(
-                        {
-                            "access": access_token,
-                        },
-                        status=status.HTTP_200_OK
-                    )
-                    return res
-                raise jwt.exceptions.InvalidTokenError("Token refresh failed")
-
-            except(jwt.exceptions.InvalidTokenError):
-                # 사용 불가능한 토큰일 때
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+                try:
+                    refresh_value = request.data.get("refresh")
+                    serializer = TokenRefreshSerializer(data={'refresh': refresh_value})
+                    if serializer.is_valid(raise_exception=True):
+                        access_token = serializer.validated_data.get('access', None)
+                        res = Response(
+                            {
+                                "access": access_token,
+                            },
+                            status=status.HTTP_200_OK
+                        )
+                        return res
+                except(jwt.exceptions.InvalidTokenError):
+                    # 사용 불가능한 토큰일 때
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class RegisterAPIView(APIView):
     def post(self, request):
