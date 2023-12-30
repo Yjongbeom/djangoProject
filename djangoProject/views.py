@@ -56,7 +56,13 @@ class AuthAPIView(APIView):
                         )
                         return res
                 except(TokenBackendError, TokenError):
+                    # refresh 토큰 만료
                     return Response({"error": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
+            except(jwt.exceptions.InvalidTokenError):
+                # 사용 불가능 토큰
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
 class RegisterAPIView(APIView):
     def post(self, request):
         serializer = RegisterUserSerializer(data=request.data)
