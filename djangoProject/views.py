@@ -77,24 +77,3 @@ class AuthAPIView(APIView):
                 # 사용 불가능 토큰
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
-class RegisterAPIView(APIView):
-    def post(self, request):
-        serializer = RegisterUserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-
-            # jwt 토큰 접근
-            token = TokenObtainPairSerializer.get_token(user)
-            refresh_token = str(token)
-            access_token = str(token.access_token)
-            res = Response(
-                {
-                    "access": access_token,
-                    "refresh": refresh_token,
-                },
-                status=status.HTTP_200_OK,
-            )
-
-            return res
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
