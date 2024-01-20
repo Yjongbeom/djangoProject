@@ -11,13 +11,12 @@ from .settings import SECRET_KEY
 
 
 class AuthAPIView(APIView):
-    # 유저 정보 확인
     def post(self, request):
-            # 유저 인증
+        # 유저 인증
         user = authenticate(
             username=request.data.get("username"), password=request.data.get("password")
         )
-        # 이미 회원가입 된 유저일 때
+
         if user is not None:
             # jwt 토큰 접근
             token = TokenObtainPairSerializer.get_token(user)
@@ -36,7 +35,7 @@ class AuthAPIView(APIView):
             return res
         else:
             try:
-                # access token을 decode 해서 유저 id 추출 => 유저 식별
+                # access token decode
                 access = request.data.get("access")
                 payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
                 username = payload.get('username')

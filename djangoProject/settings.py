@@ -33,7 +33,7 @@ def get_env_variable(var_name):
     raise ImproperlyConfigured(error_msg)
 
 SECRET_KEY = get_env_variable('SECRET_KEY')
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['*']
 # Application definition
 AUTH_USER_MODEL = 'djangoProject.User'
@@ -47,12 +47,10 @@ INSTALLED_APPS = [
     'djangoProject',
     'rest_framework',
     'rest_framework.authtoken',
-    'dj_rest_auth',
     'rest_auth',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'dj_rest_auth.registration',
     'corsheaders',
 ]
 
@@ -62,7 +60,7 @@ REST_USE_JWT = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = True # username 필드 사용 o
 ACCOUNT_EMAIL_REQUIRED = False            # email 필드 사용 x
 ACCOUNT_USERNAME_REQUIRED = True        # username 필드 사용 o
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_AUTHENTICATION_METHOD = 'username' # 사용자 인증 방법 username
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -82,6 +80,8 @@ SIMPLE_JWT = {
     'ALGORITHM': 'HS256',  # 사용할 알고리즘 지정 (HS256은 HMAC SHA-256 알고리즘)
     'SIGNING_KEY': SECRET_KEY,  # 시크릿 키 사용
     'AUTH_HEADER_TYPES': (''),  # Authorization 헤더의 타입 지정
+    # 원래 JWT의 default는 user_id(pk)로 지정 되어 있는데
+    # 그것을 username으로 바꾸기 위해 FIELD와 CLAIM를 username으로 변경
     "USER_ID_FIELD": "username",
     "USER_ID_CLAIM": "username",
 }
