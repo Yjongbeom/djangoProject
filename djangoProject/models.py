@@ -4,11 +4,13 @@ from django.db import models
 
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, username, division, password, **extra_fields):
+    def create_user(self, username, division, password, name, **extra_fields):
         if not username:
             raise ValueError('학번이 있어야한다.')
         user = self.model(username=username,
-                          division=division, **extra_fields)
+                          division=division,
+                          name=name,
+                          **extra_fields)
 
         user.set_password(password)
         user.save()
