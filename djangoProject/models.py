@@ -4,6 +4,9 @@ from django.db import models
 
 
 class MyUserManager(BaseUserManager):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.model = User
     def create_user(self, username, division, password, name, **extra_fields):
         if not username:
             raise ValueError('학번이 있어야한다.')
