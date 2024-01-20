@@ -34,7 +34,7 @@ def get_env_variable(var_name):
 
 SECRET_KEY = get_env_variable('SECRET_KEY')
 DEBUG = False
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['15.164.190.171']
 # Application definition
 AUTH_USER_MODEL = 'djangoProject.User'
 INSTALLED_APPS = [
