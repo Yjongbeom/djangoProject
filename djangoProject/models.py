@@ -7,7 +7,7 @@ class MyUserManager(BaseUserManager):
     def create_user(self, username, division, password, name, **extra_fields):
         if not username:
             raise ValueError('학번이 있어야한다.')
-        user = self.model(username=username,
+        user = self.model(username=name,
                           division=division,
                           name=name,
                           **extra_fields)
@@ -16,7 +16,7 @@ class MyUserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, username, division, password, **extra_fields):
+    def create_superuser(self, username, division, password, name, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
@@ -25,7 +25,7 @@ class MyUserManager(BaseUserManager):
             raise ValueError('Superuser must be assigned to is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must be assigned to is_superuser=True.')
-        return self.create_user(username, division, password, **extra_fields)
+        return self.create_user(username, division, password, name, **extra_fields)
 
 
 class User(AbstractBaseUser):
