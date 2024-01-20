@@ -1,7 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-from django.utils import timezone
 
 
 class MyUserManager(BaseUserManager):
@@ -33,9 +32,6 @@ class User(AbstractBaseUser):
     division = models.CharField(help_text="front or back or admin", max_length=100)
     password = models.CharField(max_length=128, null=True, blank=True)
     name = models.CharField(max_length=128,  null=True, blank=True)
-    week_id = models.IntegerField(help_text="Week ID", default=0)
-    assignment_id = models.IntegerField(help_text="Assignment ID", default=0)
-    notice_id = models.IntegerField(help_text="Notice ID",default=0)
     access = models.CharField(help_text="Access Token", max_length=255, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
